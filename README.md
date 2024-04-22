@@ -7,7 +7,7 @@ Flake templates for some of the stacks that I use.
 ### Initialize in an existing project
 
 ```bash
-nix flake init --template github:lukaswrz/devpl#template
+nix flake init --template github:lukaswrz/devtpl#template
 ```
 
 ### Create a new project
