@@ -56,9 +56,10 @@ in {
 
     adminer = {
       enable = true;
+      package = pkgs.adminerevo;
       listen = "localhost:8001";
     };
   };
 
-  dotenv.enable = true;
+  env.APP_ENV = "dev";
 }
