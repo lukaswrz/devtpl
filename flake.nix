@@ -12,6 +12,11 @@
         path = ./go;
         description = "Development environment for Go";
       };
+
+      frontend = {
+        path = ./frontend;
+        description = "Development environment for interactive web frontends";
+      };
     };
   };
 }
