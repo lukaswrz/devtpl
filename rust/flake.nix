@@ -1,5 +1,5 @@
 {
-  description = "An example interactive web frontend";
+  description = "An example Rust web application";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";

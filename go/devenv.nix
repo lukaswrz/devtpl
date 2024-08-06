@@ -5,7 +5,7 @@ in {
 
   languages.go.enable = true;
 
-  services.postgresql = {
+  services.postgres = {
     enable = true;
     initialDatabases = [{name = appName;}];
   };

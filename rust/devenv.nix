@@ -1,8 +1,6 @@
 {pkgs, ...}: let
   appName = "example";
 in {
-  languages.go.enable = true;
-
   languages.rust = {
     enable = true;
     channel = "nightly";
@@ -10,7 +8,7 @@ in {
     components = ["rustc" "cargo" "clippy" "rustfmt" "rust-analyzer"];
   };
 
-  services.postgresql = {
+  services.postgres = {
     enable = true;
     initialDatabases = [{name = appName;}];
   };
