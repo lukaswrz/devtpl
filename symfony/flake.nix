@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     devenv.url = "github:cachix/devenv";
-    phps.url = "github:fossar/nix-phps";
+    treefmt.url = "github:numtide/treefmt-nix";
   };
 
   nixConfig = {
@@ -13,14 +13,31 @@
     extra-substituters = "https://devenv.cachix.org";
   };
 
-  outputs = {flake-parts, ...} @ inputs:
+  outputs = {
+    self,
+    nixpkgs,
+    flake-parts,
+    devenv,
+    treefmt,
+  } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [inputs.devenv.flakeModule];
+      imports = [devenv.flakeModule];
 
-      systems = inputs.nixpkgs.lib.systems.flakeExposed;
+      systems = nixpkgs.lib.systems.flakeExposed;
 
       perSystem = {
+        pkgs,
+        system,
+        ...
+      }: let
+        treefmtEval = treefmt.lib.evalModule pkgs ./treefmt.nix;
+      in {
         devenv.shells.default.imports = [./devenv.nix];
+
+        formatter = treefmtEval.config.build.wrapper;
+        checks.formatting = treefmtEval.config.build.check self;
+
+        packages.default = pkgs.callPackage ./package.nix {};
       };
     };
 }

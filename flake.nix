@@ -5,22 +5,17 @@
     templates = {
       symfony = {
         path = ./symfony;
-        description = "Development environment for Symfony";
+        description = "Development environment for Symfony web applications";
       };
 
       go-backend = {
         path = ./go-backend;
-        description = "Development environment for Go backends";
+        description = "Development environment for Go web applications";
       };
 
-      rust-backend = {
-        path = ./rust-backend;
-        description = "Development environment for Rust backends";
-      };
-
-      frontend = {
-        path = ./frontend;
-        description = "Development environment for interactive web frontends";
+      js-fullstack = {
+        path = ./js-fullstack;
+        description = "Development environment for fullstack web applications in JavaScript";
       };
     };
   };

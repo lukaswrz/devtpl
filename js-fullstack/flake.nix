@@ -1,5 +1,5 @@
 {
-  description = "An example Go application";
+  description = "An example JavaScript fullstack application";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";

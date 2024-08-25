@@ -1,11 +1,12 @@
 let
   appName = "example";
 in {
-  languages.rust = {
+  languages.javascript = {
     enable = true;
-    channel = "nightly";
-
-    components = ["rustc" "cargo" "clippy" "rustfmt" "rust-analyzer"];
+    npm = {
+      enable = true;
+      install = true;
+    };
   };
 
   services.postgres = {
