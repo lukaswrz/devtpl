@@ -1,11 +1,15 @@
 {
-  description = "An example Go application";
+  description = "";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     devenv.url = "github:cachix/devenv";
     treefmt.url = "github:numtide/treefmt-nix";
+    devenv-root = {
+      url = "file+file:///dev/null";
+      flake = false;
+    };
   };
 
   nixConfig = {
@@ -19,9 +23,15 @@
     flake-parts,
     devenv,
     treefmt,
+    devenv-root,
   } @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [devenv.flakeModule];
+      imports = [
+        devenv.flakeModule
+        treefmt.flakeModule
+
+        ./treefmt.nix
+      ];
 
       systems = nixpkgs.lib.systems.flakeExposed;
 
@@ -29,13 +39,15 @@
         pkgs,
         system,
         ...
-      }: let
-        treefmtEval = treefmt.lib.evalModule pkgs ./treefmt.nix;
-      in {
-        devenv.shells.default.imports = [./devenv.nix];
+      }: {
+        devenv.shells.default = {
+          imports = [./devenv.nix];
 
-        formatter = treefmtEval.config.build.wrapper;
-        checks.formatting = treefmtEval.config.build.check self;
+          devenv.root = let
+            devenvRootFileContent = builtins.readFile devenv-root.outPath;
+          in
+            pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
+        };
 
         packages.default = pkgs.callPackage ./package.nix {};
       };
