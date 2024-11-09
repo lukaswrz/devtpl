@@ -1,5 +1,5 @@
 from pathlib import Path
-from string import Template
+from string import Template as TextTemplate
 from enum import Enum
 import tomllib as toml
 import json
@@ -114,6 +114,24 @@ def nix_esc(raw: str) -> str:
     return result
 
 
+class TemplateMeta:
+    description: str
+    welcome_text: str | None
+
+    def __init__(self, description: str, welcome_text: str | None):
+        self.description = description
+        self.welcome_text = welcome_text
+
+    def to_nix(self, path: str):
+        return ''.join([
+            "{",
+            f'path=./.+"/{nix_esc(path)}";',
+            f'description="{nix_esc(template_meta.description)}";',
+            f'welcomeText="{nix_esc(template_meta.welcome_text)}";' if self.welcome_text is not None else "",
+            "}",
+        ])
+
+
 if __name__ == "__main__":
     templates: dict[str, dict[str, str]] = {}
 
@@ -136,7 +154,10 @@ if __name__ == "__main__":
             meta = toml.load(fp)
             description = meta.get("description", "Development environment")
             welcome_text = meta.get("welcome_text", None)
-            templates[name] = {}
+            templates[name] = {
+                "description": description,
+                "path": f"./{name}"
+            }
             templates[name]["description"] = description
             if welcome_text is not None:
                 templates[name]["welcomeText"] = welcome_text
@@ -144,7 +165,7 @@ if __name__ == "__main__":
         shutil.copytree((src / "copy"), dst)
 
         (dst / "flake.nix").write_text(
-            Template(FLAKE_FILE_TEMPLATE).safe_substitute(description=description)
+            TextTemplate(FLAKE_FILE_TEMPLATE).safe_substitute(description=description)
         )
         (dst / ".envrc").write_text(ENVRC_CONTENTS)
         Path(".envrc").write_text(ENVRC_CONTENTS)

@@ -30,6 +30,7 @@
         devenv.flakeModule
         treefmt.flakeModule
 
+        ./templates.nix
         ./treefmt.nix
       ];
 
@@ -51,10 +52,5 @@
 
         packages.default = pkgs.writers.writePython3Bin "gen" {flakeIgnore = ["E501"];} ./gen.py;
       };
-
-      flake.templates = nixpkgs.lib.pipe ./templates.json [
-        builtins.readFile
-        builtins.fromJSON
-      ];
     };
 }

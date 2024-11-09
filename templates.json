@@ -1,11 +1,14 @@
 {
   "symfony": {
-    "description": ""
+    "description": "",
+    "path": "./symfony"
   },
   "go-backend": {
-    "description": ""
+    "description": "",
+    "path": "./go-backend"
   },
   "js-fullstack": {
-    "description": ""
+    "description": "",
+    "path": "./js-fullstack"
   }
 }
