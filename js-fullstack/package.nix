@@ -1,4 +1,0 @@
-{buildNpmPackage}:
-buildNpmPackage {
-  # TODO
-}

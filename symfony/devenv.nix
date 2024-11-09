@@ -1,5 +1,5 @@
 {
-  config,
+  lib,
   pkgs,
   ...
 }: let
@@ -17,13 +17,6 @@ in {
       xdebug.discover_client_host = 1
       xdebug.client_host = localhost
     '';
-    fpm.pools.${appName}.settings = {
-      "pm" = "dynamic";
-      "pm.max_children" = 10;
-      "pm.start_servers" = 2;
-      "pm.min_spare_servers" = 1;
-      "pm.max_spare_servers" = 10;
-    };
   };
 
   services = {
@@ -42,23 +35,14 @@ in {
       ];
     };
 
-    caddy = {
-      enable = true;
-      virtualHosts.":8000" = {
-        extraConfig = ''
-          root * public
-          php_fastcgi unix/${config.languages.php.fpm.pools.${appName}.socket}
-          file_server
-        '';
-      };
-    };
-
     adminer = {
       enable = true;
       package = pkgs.adminerevo;
       listen = "localhost:8001";
     };
   };
+
+  processes.symfony.exec = "${lib.getExe pkgs.symfony-cli} server:start --port 8000";
 
   env.APP_ENV = "dev";
 }

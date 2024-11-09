@@ -1,4 +1,0 @@
-{buildComposerProject}:
-buildComposerProject {
-  # TODO
-}
