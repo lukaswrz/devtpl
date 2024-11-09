@@ -45,4 +45,6 @@ in {
   processes.symfony.exec = "${lib.getExe pkgs.symfony-cli} server:start --port 8000";
 
   env.APP_ENV = "dev";
+
+  dotenv.enable = true;
 }
